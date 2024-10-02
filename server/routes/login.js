@@ -28,18 +28,18 @@ module.exports = async (req, res) => {
 
   const userObject = user.toObject();
   const token = jwt.sign(userObject, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "15m",
   });
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    // secure: process.env.NODE_ENV === "production",
+  const refreshToken = jwt.sign(userObject, process.env.REFRESH_SECRET, {
+    expiresIn: "7d",
   });
 
   res.json({
     message: "User logged in successfully",
     user,
     token,
+    refreshToken,
   });
 
   // res.redirect("/dashboard");

@@ -23,7 +23,8 @@ app.use(cors());
 app.use(express.json());
 
 // auth middleware
-const authMiddleWare = require("./middleware/jwtCookieAuth");
+const authMiddleWare = require("./middleware/jwtTokenAuth");
+const jwtTokenRefresh = require("./middleware/jwtTokenRefresh");
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Workout App API!");
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 app.post("/api/users/login", require("./routes/login"));
 app.post("/api/users/register", require("./routes/register"));
 // app.get("/api/users/logout", require("./routes/logout"));
+app.get("/api/users/refresh", jwtTokenRefresh, (req, res) => {});
 
 app.get("/api/users/authtest", authMiddleWare, (req, res) => {
   res.send("authenticated");
