@@ -24,10 +24,12 @@ module.exports = async (req, res) => {
       error: "Invalid credentials",
     });
   }
+  delete user.password;
 
-  // delete user.password;
-  // ERROR HERE!!!!
-  const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const userObject = user.toObject();
+  const token = jwt.sign(userObject, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
 
   res.cookie("token", token, {
     httpOnly: true,
