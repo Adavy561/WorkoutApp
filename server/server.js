@@ -19,18 +19,25 @@ const connectDB = async () => {
 };
 connectDB();
 
-const login = require("./routes/login");
-const register = require("./routes/register");
-
 app.use(cors());
 app.use(express.json());
+
+// auth middleware
+const authMiddleWare = require("./middleware/jwtTokenAuth");
+const jwtTokenRefresh = require("./middleware/jwtTokenRefresh");
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Workout App API!");
 });
 
-app.post("/api/users/login", login);
-app.post("/api/users/register", register);
+app.post("/api/users/login", require("./routes/login"));
+app.post("/api/users/register", require("./routes/register"));
+// app.get("/api/users/logout", require("./routes/logout"));
+app.get("/api/users/refresh", jwtTokenRefresh, (req, res) => {});
+
+app.get("/api/users/authtest", authMiddleWare, (req, res) => {
+  res.send("authenticated");
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
