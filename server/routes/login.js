@@ -41,4 +41,6 @@ module.exports = async (req, res) => {
     user,
     token,
   });
+
+  // res.redirect("/dashboard");
 };
