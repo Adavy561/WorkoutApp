@@ -19,6 +19,16 @@ const connectDB = async () => {
 };
 connectDB();
 
+const aws = require("aws-sdk");
+
+aws.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
+
+const s3 = new aws.S3();
+
 app.use(cors());
 app.use(express.json());
 
@@ -38,6 +48,13 @@ app.get("/api/users/refresh", jwtTokenRefresh, (req, res) => {});
 app.get("/api/users/authtest", authMiddleWare, (req, res) => {
   res.send("authenticated");
 });
+
+app.post(
+  "/api/videos/upload",
+  authMiddleWare,
+  upload.single("video"),
+  async(req, res)
+);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
