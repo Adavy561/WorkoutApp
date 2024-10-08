@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const register = require("./register");
-const login = require("./login");
+const register = require("../controller/registerUserController");
+const login = require("../controller/loginUserController");
 
 // auth middleware
-const authMiddleWare = require("../../middleware/jwtTokenAuth");
-const jwtTokenRefresh = require("../../middleware/jwtTokenRefresh");
+const authMiddleWare = require("../middleware/jwtTokenAuth");
+const jwtTokenRefresh = require("../middleware/jwtTokenRefresh");
 
 router.post("/register", register);
 router.post("/login", login);
