@@ -14,8 +14,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Workout App API!");
 });
 
-app.use("/api/users", require("./routes/authentication/authRouter"));
-app.use("/api/workouts", require("./routes/uploadRouter/uploadRouter"));
+app.use("/api/users", require("./routes/authRouter"));
+app.use("/api/videos", require("./routes/uploadRouter"));
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
