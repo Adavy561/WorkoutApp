@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", require("./routes/authRouter"));
-app.use("/api/videos", require("./routes/uploadRouter"));
+app.use("/api/media", require("./routes/mediaRouter"));
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
