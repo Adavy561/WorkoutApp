@@ -2,28 +2,10 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
-// auth middleware
 const authMiddleWare = require("../middleware/jwtTokenAuth");
-const viewMediaController = require("../controller/viewMediaController");
 
+// Create
 const upload = require("../controller/uploadMediaController");
-// router.post("/upload", upload.single("file"), (req, res) => {
-//   // authMiddleWare
-//   try {
-//     // File is successfully uploaded at this point
-//     const file = req.file;
-//     res.status(200).json({
-//       message: "File uploaded successfully",
-//       fileUrl: file.location, // The S3 URL of the uploaded file
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Failed to upload file" });
-//   }
-// });
-
-router.get("/view", viewMediaController);
-
 const Post = require("../models/postSchema");
 const User = require("../models/userSchema");
 router.post(
@@ -62,5 +44,28 @@ router.post(
     }
   }
 );
+
+// Read (Many & Single User)
+router.get("/posts/feed", authMiddleWare, async (req, res) => {
+  const { userId, page = 1, limit = 10 } = req.query;
+
+  try {
+    // Define query criteria
+    const query = userId ? { user: userId } : {}; // Filter by user if userId is provided
+
+    // Fetch posts with pagination
+    const posts = await Post.find(query)
+      .sort({ createdAt: -1 }) // Sort by newest posts
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .populate("user", "username") // Include username if necessary
+      .exec();
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ error: "Failed to fetch posts" });
+  }
+});
 
 module.exports = router;
