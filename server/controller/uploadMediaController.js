@@ -5,7 +5,7 @@ const multerS3 = require("multer-s3");
 const bucketName = process.env.AWS_BUCKET_NAME;
 
 s3 = require("../middleware/s3");
-const path = require("path");
+// const path = require("path");
 const upload = multer({
   storage: multerS3({
     s3: s3,
